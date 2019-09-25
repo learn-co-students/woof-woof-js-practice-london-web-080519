@@ -20,10 +20,21 @@ const API = { get, patch }
 
 // CONSTANTS
 const goodDogFilter = document.querySelector("button#good-dog-filter")
+     // goodDogFilter.setAttribute("data-filtered-dogs", "false")
+      goodDogFilter.addEventListener("click", toggleGoodDogs)
 const dogBar = document.querySelector("div#dog-bar")
 const dogInfo = document.querySelector("div#dog-info")
 
 // FUNCTIONS
+
+function toggleGoodDogs(event)  {
+    event.target.dataset.filteredDogs = !event.target.dataset.filteredDogs
+    if (!!event.target.dataset.filteredDogs) {
+        event.target.innerText = "Filter good dogs: ON"
+    } else {
+        event.target.innerText = "Filter good dogs: OFF"
+    }
+}
 
 function loadPups() {
     // get all pups 
@@ -46,18 +57,21 @@ function openPup(puptoSee) {
     let img = document.createElement("img")
     img.setAttribute("src", puptoSee.image)
     
-    let h2 = document.createElement("h1")
+    let h2 = document.createElement("h2")
     h2.innerText = puptoSee.name
 
-    let button = goodDogButton(puptoSee)
+    let button = document.createElement("button")
+    button.setAttribute("id", "toggleGoodness")
+    
     button.addEventListener("click", () => changeDogStatus(puptoSee))
 
     dogInfo.append( img, h2, button )
+    goodDogButton(puptoSee)
 }
 
 goodDogButton = (doggo) => {
     //yay abstraction
-    let button = document.createElement("button")
+    let button = document.querySelector("button#toggleGoodness")
     if (!doggo.isGoodDog) {
         button.innerText = "Bad Dog!"
     } else {
@@ -67,18 +81,12 @@ goodDogButton = (doggo) => {
 }
 
 changeDogStatus = (dogToUpdate) => {
-    let button = event.target
+    console.log(dogToUpdate.isGoodDog)
     isGoodDog = !dogToUpdate.isGoodDog
-    API.patch(API_URL, dogToUpdate.id, { isGoodDog } ).then(dog => {
-        debugger;
-        if (!dog.isGoodDog) {
-            
-            event.target.innerText = "Bad Dog!"
-        } else {
-            event.target.innerText = "Good Dog!"
-        }
-    })
+    API.patch(API_URL, dogToUpdate.id, { isGoodDog } ).then(dog => goodDogButton(dog))
 }
+
+
 
 //start up
 //window.addEventListener('DOMContentLoaded', () => loadPups);
