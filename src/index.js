@@ -5,8 +5,15 @@ function get(url) {
     return fetch(url).then(response => response.json())
 }
 
-function patch(url, id) {
-    return fetch(`${url}/${id}`).then(response=>response.json())
+function patch(url, id, data) {
+    return fetch(`${url}/${id}`, {
+        method: "PATCH",
+        headers: {
+            "Content-Type": "application/json",
+            "Accept": "application/json"
+        },
+        body: JSON.stringify(data)
+    }).then(response=>response.json())
 }
 
 const API = { get, patch }
@@ -42,7 +49,10 @@ function openPup(puptoSee) {
     let h2 = document.createElement("h1")
     h2.innerText = puptoSee.name
 
-    dogInfo.append( img, h2, goodDogButton(puptoSee) )
+    let button = goodDogButton(puptoSee)
+    button.addEventListener("click", () => changeDogStatus(puptoSee))
+
+    dogInfo.append( img, h2, button )
 }
 
 goodDogButton = (doggo) => {
@@ -53,12 +63,21 @@ goodDogButton = (doggo) => {
     } else {
         button.innerText = "Good Dog!"
     }
-    button.addEventListener("click", changeDogStatus)
     return button
 }
 
-changeDogStatus = () => {
-    console.log()
+changeDogStatus = (dogToUpdate) => {
+    let button = event.target
+    isGoodDog = !dogToUpdate.isGoodDog
+    API.patch(API_URL, dogToUpdate.id, { isGoodDog } ).then(dog => {
+        debugger;
+        if (!dog.isGoodDog) {
+            
+            event.target.innerText = "Bad Dog!"
+        } else {
+            event.target.innerText = "Good Dog!"
+        }
+    })
 }
 
 //start up
