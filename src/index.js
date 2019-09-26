@@ -20,21 +20,22 @@ const API = { get, patch }
 
 // CONSTANTS
 const goodDogFilter = document.querySelector("button#good-dog-filter")
-     // goodDogFilter.setAttribute("data-filtered-dogs", "false")
-      goodDogFilter.addEventListener("click", toggleGoodDogs)
+    //   goodDogFilter.setAttribute("data-filtered-dogs", "false")
+    //   goodDogFilter.addEventListener("click", toggleGoodDogs)
 const dogBar = document.querySelector("div#dog-bar")
 const dogInfo = document.querySelector("div#dog-info")
 
 // FUNCTIONS
 
-function toggleGoodDogs(event)  {
-    event.target.dataset.filteredDogs = !event.target.dataset.filteredDogs
-    if (!!event.target.dataset.filteredDogs) {
-        event.target.innerText = "Filter good dogs: ON"
-    } else {
-        event.target.innerText = "Filter good dogs: OFF"
-    }
-}
+// SAVE THE BELOW FOR LATER
+// function toggleGoodDogs(event)  {
+//     event.target.dataset.filteredDogs = !event.target.dataset.filteredDogs
+//     if (!!event.target.dataset.filteredDogs) {
+//         event.target.innerText = "Filter good dogs: ON"
+//     } else {
+//         event.target.innerText = "Filter good dogs: OFF"
+//     }
+// }
 
 function loadPups() {
     // get all pups 
