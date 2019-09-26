@@ -62,30 +62,36 @@ function openPup(puptoSee) {
 
     let button = document.createElement("button")
     button.setAttribute("id", "toggleGoodness")
-    
-    button.addEventListener("click", () => changeDogStatus(puptoSee))
 
     dogInfo.append( img, h2, button )
-    goodDogButton(puptoSee)
+    goodDogButton(puptoSee)    
+    button.addEventListener("click", () => changeDogStatus(puptoSee))
+
 }
 
 goodDogButton = (doggo) => {
     //yay abstraction
     let button = document.querySelector("button#toggleGoodness")
-    if (!doggo.isGoodDog) {
-        button.innerText = "Bad Dog!"
+    if (doggo.isGoodDog === false) {
+        button.innerText = "Dog is bad. Make this a good dog!"
     } else {
-        button.innerText = "Good Dog!"
+        button.innerText = "Dog is good. Make this a bad dog!"
     }
     return button
 }
 
-changeDogStatus = (dogToUpdate) => {
-    console.log(dogToUpdate.isGoodDog)
-    isGoodDog = !dogToUpdate.isGoodDog
-    API.patch(API_URL, dogToUpdate.id, { isGoodDog } ).then(dog => goodDogButton(dog))
+changeDogStatus = (dogToUpdate) => { 
+    if ( dogToUpdate.isGoodDog === false ) {
+        dogToUpdate.isGoodDog = true
+    } else {
+        dogToUpdate.isGoodDog = false
+    }  
+    sendPatchRequest( dogToUpdate )
 }
 
+sendPatchRequest = (dog) => {
+    API.patch(API_URL, dog.id, dog ).then(dog => goodDogButton(dog))
+}
 
 
 //start up
